@@ -1,0 +1,32 @@
+services:
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  consul:
+    image: consul
+    ports:
+      - "8500:8500"
+
+  webapi:
+    image: testproject/webapi:1.0
+    build:
+      dockerfile: .\WebApi\Dockerfile
+    depends_on:
+      - redis
+      - consul
+    ports:
+      - "5194:80"
+
+  mockservice:
+    image: testproject/mockservice:1.0
+    build:
+      dockerfile: .\MockService\Dockerfile
+    depends_on:
+      - redis
+      - consul
+    ports:
+      - "5296:80"
+
