@@ -33,7 +33,7 @@ namespace MockService.Consul
             {
                 ID = _registrationID,
                 Name = _consulConfig.Value.ServiceName,
-                Address = "http://localhost",
+                Address = _consulConfig.Value.Address,
                 Port = port
             };
 
