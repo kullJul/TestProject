@@ -10,6 +10,13 @@ services:
     ports:
       - "8500:8500"
 
+  vault:
+    image: vault
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: someRoot
+    ports:
+      - "8200:8200"
+
   webapi:
     image: testproject/webapi:1.0
     build:
