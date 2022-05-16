@@ -17,6 +17,16 @@ services:
     ports:
       - "8200:8200"
 
+  vaultservice:
+    image: testproject/vaultservice:1.0
+    build:
+      dockerfile: .\VaultService\Dockerfile
+    depends_on:
+      - consul
+      - vault
+    ports:
+      - "5080:80"
+
   mockservice:
     image: testproject/mockservice:1.0
     build:
