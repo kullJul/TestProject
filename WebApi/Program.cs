@@ -5,6 +5,7 @@ using StackExchange.Redis;
 using System.Net;
 using System.Net.Sockets;
 using WebApi.Consul;
+using WebApi.Refit;
 
 [assembly: ApiController]
 
@@ -14,15 +15,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IDatabase>(x =>
-{
-    var db = ConnectionMultiplexer.Connect("redis");
-    return db.GetDatabase();
-});
-
 builder.Services.AddSingleton<IHostedService, ConsulHostedService>();
 
 builder.Services.Configure<ConsulConfig>(builder.Configuration.GetSection("consulConfig"));
+
 builder.Services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
 {
     var address = builder.Configuration["consulConfig:address"];

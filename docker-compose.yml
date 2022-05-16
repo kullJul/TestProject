@@ -17,16 +17,6 @@ services:
     ports:
       - "8200:8200"
 
-  webapi:
-    image: testproject/webapi:1.0
-    build:
-      dockerfile: .\WebApi\Dockerfile
-    depends_on:
-      - redis
-      - consul
-    ports:
-      - "5194:80"
-
   mockservice:
     image: testproject/mockservice:1.0
     build:
@@ -36,4 +26,15 @@ services:
       - consul
     ports:
       - "5296:80"
+
+  webapi:
+    image: testproject/webapi:1.0
+    build:
+      dockerfile: .\WebApi\Dockerfile
+    depends_on:
+      - redis
+      - consul
+      - mockservice
+    ports:
+      - "5194:80"
 

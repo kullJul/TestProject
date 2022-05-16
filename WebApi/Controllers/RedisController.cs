@@ -1,21 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Refit;
 using StackExchange.Redis;
+using WebApi.Refit;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class RedisController : ControllerBase
     {
-        readonly IDatabase db;
-        public RedisController(IDatabase db)
+        readonly IMockServiceClient mockServiceClient;
+        public RedisController()
         {
-            this.db = db;
+            mockServiceClient = RestService.For<IMockServiceClient>("http://mockservice:80"); 
         }
 
         [HttpGet("info")]
         public string GetInfo()
         {
-            return "Redis controller";
+            return mockServiceClient.GetInfo().GetAwaiter().GetResult();
         }
 
         [HttpGet]
@@ -25,14 +27,21 @@ namespace WebApi.Controllers
             {
                 return "key is null or empty";
             }
-            return db.StringGet(key);
+            return mockServiceClient.GetRedisValue(key).GetAwaiter().GetResult();
         }
 
         [HttpPost]
         public string SetRedisValue(string @key, string @value)
         {
-            db.StringSet(key, value);
-            return "Done";
+            if (string.IsNullOrEmpty(key))
+            {
+                return "key is null or empty";
+            }
+            if (string.IsNullOrEmpty(value))
+            {
+                return "value is null or empty";
+            }
+            return mockServiceClient.SetRedisValue(key, value).GetAwaiter().GetResult();
         }
     }
 }
