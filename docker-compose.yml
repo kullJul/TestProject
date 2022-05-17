@@ -1,6 +1,6 @@
 services:
 
-  redis:
+  redis_notification:
     image: redis
     ports:
       - "6379"
