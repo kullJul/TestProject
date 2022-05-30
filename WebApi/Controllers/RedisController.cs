@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Refit;
 using StackExchange.Redis;
 using WebApi.Refit;
@@ -6,12 +7,13 @@ using WebApi.Refit;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes ="IdentityApiKey")]
     public class RedisController : ControllerBase
     {
         readonly IMockServiceClient mockServiceClient;
         public RedisController()
         {
-            mockServiceClient = RestService.For<IMockServiceClient>("http://mockservice:80"); 
+            mockServiceClient = RestService.For<IMockServiceClient>("http://mockservice:80");
         }
 
         [HttpGet("info")]

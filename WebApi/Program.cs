@@ -1,9 +1,13 @@
 using Consul;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using WebApi.Consul;
 using WebApi.Refit;
 
@@ -11,7 +15,22 @@ using WebApi.Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(builder.Configuration["JWTConfig:AuthenticationProviderKey"], options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWTConfig:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWTConfig:Audience"],
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTConfig:Key"])),
+        ValidateIssuerSigningKey = true
+    };
+});
 
 builder.Services.AddControllers();
 
@@ -33,6 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

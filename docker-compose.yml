@@ -54,5 +54,11 @@ services:
       dockerfile: .\OcelotApiGw\Dockerfile
     ports:
       - "5175:80"
-      
+
+  ssoservice:
+    image: testproject/ssoservice:1.0
+    build:
+      dockerfile: .\SSOService\Dockerfile
+    ports:
+      - "5065:80"      
 
