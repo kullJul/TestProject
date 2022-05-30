@@ -48,3 +48,11 @@ services:
     ports:
       - "5194:80"
 
+  ocelotgw:
+    image: testproject/ocelotgw:1.0
+    build: 
+      dockerfile: .\OcelotApiGw\Dockerfile
+    ports:
+      - "5175:80"
+      
+

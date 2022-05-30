@@ -1,0 +1,40 @@
+﻿{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/redis/info",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/webapi/info",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/redis?key={key}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/webapi/{key}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/redis?key={key}&value={value}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/webapi/{key}/{value}",
+      "UpstreamHttpMethod": [ "Post" ]
+    }
+  ]
+}
