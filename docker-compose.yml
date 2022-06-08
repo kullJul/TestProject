@@ -18,8 +18,8 @@ services:
       - "8200:8200"
 
   vaultservice:
-    image: testproject/vaultservice:1.0
     build:
+      context: .
       dockerfile: .\VaultService\Dockerfile
     depends_on:
       - consul
@@ -27,37 +27,44 @@ services:
     ports:
       - "5080:80"
 
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+
   mockservice:
-    image: testproject/mockservice:1.0
     build:
+      context: .
       dockerfile: .\MockService\Dockerfile
     depends_on:
       - redis
       - consul
+      - zipkin
     ports:
       - "5296:80"
 
   webapi:
-    image: testproject/webapi:1.0
     build:
+      context: .
       dockerfile: .\WebApi\Dockerfile
     depends_on:
       - redis
       - consul
       - mockservice
+      - zipkin
     ports:
       - "5194:80"
 
   ocelotgw:
-    image: testproject/ocelotgw:1.0
     build: 
+      context: .
       dockerfile: .\OcelotApiGw\Dockerfile
     ports:
       - "5175:80"
 
   ssoservice:
-    image: testproject/ssoservice:1.0
     build:
+      context: .
       dockerfile: .\SSOService\Dockerfile
     ports:
       - "5065:80"      

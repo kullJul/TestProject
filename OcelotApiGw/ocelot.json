@@ -1,7 +1,7 @@
 ﻿{
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/redis/info",
+      "DownstreamPathTemplate": "/api/webapi/info",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -16,7 +16,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/redis?key={key}",
+      "DownstreamPathTemplate": "/api/webapi?key={key}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -31,7 +31,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/redis?key={key}&value={value}",
+      "DownstreamPathTemplate": "/api/webapi?key={key}&value={value}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

@@ -4,10 +4,11 @@ using StackExchange.Redis;
 namespace MockService.Controllers
 {
     [Route("api/[controller]")]
-    public class RedisController : ControllerBase
+    [ApiController]
+    public class RedisController : MyController
     {
         readonly IDatabase db;
-        public RedisController(IDatabase db)
+        public RedisController(IDatabase db, IConfiguration configuration) :base(configuration)
         {
             this.db = db;
         }
@@ -15,6 +16,7 @@ namespace MockService.Controllers
         [HttpGet("info")]
         public string GetInfo()
         {
+            TraceLog("GET", "Get info");
             return "Redis controller";
         }
 
@@ -23,8 +25,10 @@ namespace MockService.Controllers
         {
             if (string.IsNullOrEmpty(key))
             {
+                TraceLog("key is null or empty");
                 return "key is null or empty";
             }
+            TraceLog("GET", $"Get redis value for key = {key}");
             return db.StringGet(key);
         }
 
@@ -32,6 +36,7 @@ namespace MockService.Controllers
         public string SetRedisValue(string @key, string @value)
         {
             db.StringSet(key, value);
+            TraceLog("POST", $"Set redis value = {value} for key = {key}");
             return "Done";
         }
     }
