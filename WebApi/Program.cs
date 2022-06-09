@@ -3,6 +3,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using StackExchange.Redis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -16,6 +17,16 @@ using zipkin4net.Tracers.Zipkin;
 using zipkin4net.Transport.Http;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+         .Enrich.FromLogContext()
+        .Enrich.WithProperty("ApplicationName", "WebApi")
+        .WriteTo.LogstashHttp("https://logstash:5044")
+        .WriteTo.Console() // JUST FOR DEBUG
+        //.MinimumLevel.Warning()
+        .CreateLogger();
+
+builder.Logging.AddSerilog();
 
 var applicationName = builder.Configuration["consulConfig:serviceName"];
 
